@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to my LeetCode solutions repository! Here, you'll find a collection of my accepted solutions to various LeetCode problems. These solutions represent my efforts in solving problems on LeetCode and are organized for easy reference.
+Welcome to my LeetCode solutions repository! Here, you'll find a collection of my accepted solutions to various LeetCode problems. These solutions represent my efforts in solving problems on LeetCode and are organized for easy reference. These may or may not be the best but they are the best upto my knowlege.
 
 ## Purpose
 
