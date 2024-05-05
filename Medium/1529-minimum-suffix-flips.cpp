@@ -2,13 +2,11 @@ class Solution {
 public:
     int minFlips(string target) {
                 int flips = 0;
-        string s(target.length(), '0'); // Initialize s with all zeros
-        for (int i = 0; i < target.length(); ++i) {
-            if (s[i] != target[i]) {
-                flips++;
-                for (int j = i; j < target.length(); ++j) {
-                    s[j] = (s[j] == '0') ? '1' : '0'; // Toggle the bits
-                }
+        char state = '0'; // Initialize the current state to '0'
+        for (char c : target) {
+            if (c != state) {
+                flips++; // Increment flips when the current character is different from the state
+                state = c; // Update the state
             }
         }
         return flips;
