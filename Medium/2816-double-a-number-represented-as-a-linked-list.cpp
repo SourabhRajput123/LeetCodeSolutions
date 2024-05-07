@@ -1,36 +1,36 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 public:
+    ListNode* reverse(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr) {
+            ListNode* nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        return prev;
+    }
+    
     ListNode* doubleIt(ListNode* head) {
-                // Step 1: Build the integer representation of the number
-        long long number = 0;
-        ListNode* current = head;
-        while (current) {
-            number = number * 10 + current->val;
-            current = current->next;
+        if (!head) return nullptr;
+        
+        head = reverse(head); // Reverse the list
+        
+        ListNode* curr = head;
+        int carry = 0;
+        
+        while (curr) {
+            int newVal = curr->val * 2 + carry;
+            curr->val = newVal % 10;
+            carry = newVal / 10;
+            if (!curr->next && carry > 0) {
+                curr->next = new ListNode(carry); // Add a new node for remaining carry
+                break;
+            }
+            curr = curr->next;
         }
         
-        // Step 2: Double the integer
-        number *= 2;
-        
-        // Step 3: Create a new linked list for the doubled integer
-        ListNode* newHead = nullptr;
-        while (number > 0) {
-            ListNode* newNode = new ListNode(number % 10);
-            newNode->next = newHead;
-            newHead = newNode;
-            number /= 10;
-        }
-        
-        return newHead ? newHead : new ListNode(0);
+        return reverse(head); // Reverse back the list
     }
 };
