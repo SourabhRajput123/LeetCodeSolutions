@@ -5,22 +5,24 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        # Initialize the queue with the number of tickets each person wants to buy
-        queue = [(tickets[i], i) for i in range(len(tickets))]
+        # Initialize variables
         time = 0
+        queue = [i for i in range(len(tickets))]
+        remain_tickets = tickets[:]
         
-        # Simulate the process of people buying tickets until the person at position k finishes buying tickets
+        # Simulate the process of people buying tickets
         while queue:
-            # Buy tickets for the person at the front of the queue
-            num_tickets, person_index = queue.pop(0)
-            # Update the time taken
-            time += min(num_tickets, 1) * len(tickets)
-            # Update the number of tickets the person wants to buy
-            num_tickets -= min(num_tickets, 1)
-            # If the person still wants to buy more tickets, put them back in the queue
-            if num_tickets > 0:
-                queue.append((num_tickets, person_index))
-            # If the person at position k finishes buying tickets, return the time taken
-            if person_index == k and num_tickets == 0:
+            # Increment time by 1 for each iteration
+            time += 1
+            # Check if the person at the front of the queue finishes buying tickets
+            if remain_tickets[queue[0]] == 0:
+                queue.pop(0)  # Remove the person from the queue
+                continue
+            # Decrement the remaining tickets for the person at the front of the queue
+            remain_tickets[queue[0]] -= 1
+            # Move the person to the end of the queue
+            queue.append(queue.pop(0))
+            # If the person at position k finishes buying tickets, return the time
+            if queue[0] == k and remain_tickets[queue[0]] == 0:
                 return time
-        return time  # This line is not strictly necessary, but included for clarity
+        return time
