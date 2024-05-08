@@ -19,8 +19,11 @@ class Solution(object):
             pairs += freq // 2
             triples += freq // 3
         
-        # Check if the total count of pairs and triples is sufficient to empty the array
-        if pairs >= triples:
+        # Use any remaining pairs to create triples wherever possible
+        triples += pairs // 3
+        
+        # Check if the total count of triples is sufficient to empty the array
+        if triples * 3 <= sum(freq_map.values()):
             # Calculate the total number of operations required
             return pairs * 2 + triples * 3
         else:
