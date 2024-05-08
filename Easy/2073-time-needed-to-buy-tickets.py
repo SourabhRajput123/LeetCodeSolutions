@@ -7,21 +7,16 @@ class Solution(object):
         """
         # Initialize variables
         time = 0
-        queue = [i for i in range(len(tickets))]
-        remain_tickets = tickets[:]
+        n = len(tickets)
         
         # Simulate the process of people buying tickets
-        while queue:
-            # Increment time by 1 for each iteration
+        while tickets[k] > 0:
+            # Increment time by the number of people in line
             time += 1
-            # Check if the person at the front of the queue finishes buying tickets
-            if remain_tickets[queue[0]] == 0:
-                if queue[0] == k:  # Check if it's the person at position k
-                    return time  # Return the time if they finish buying tickets
-                queue.pop(0)  # Remove the person from the queue
-                continue
-            # Decrement the remaining tickets for the person at the front of the queue
-            remain_tickets[queue[0]] -= 1
-            # Move the person to the end of the queue
-            queue.append(queue.pop(0))
+            for i in range(n):
+                # If person has tickets left, decrement and check if it's person k
+                if tickets[i] > 0:
+                    tickets[i] -= 1
+                    if i == k and tickets[i] == 0:
+                        return time
         return time
