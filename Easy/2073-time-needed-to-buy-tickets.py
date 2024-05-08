@@ -16,13 +16,12 @@ class Solution(object):
             time += 1
             # Check if the person at the front of the queue finishes buying tickets
             if remain_tickets[queue[0]] == 0:
+                if queue[0] == k:  # Check if it's the person at position k
+                    return time  # Return the time if they finish buying tickets
                 queue.pop(0)  # Remove the person from the queue
                 continue
             # Decrement the remaining tickets for the person at the front of the queue
             remain_tickets[queue[0]] -= 1
             # Move the person to the end of the queue
             queue.append(queue.pop(0))
-            # If the person at position k finishes buying tickets, return the time
-            if queue[0] == k and remain_tickets[queue[0]] == 0:
-                return time
         return time
