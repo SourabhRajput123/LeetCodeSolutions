@@ -9,29 +9,19 @@ class Solution(object):
         # Count the frequency of each element
         freq_map = Counter(nums)
         
-        # Initialize variables to track the number of operations
-        operations = 0
-        pairs = []
+        # Initialize variables to track the number of pairs and triples
+        pairs = 0
+        triples = 0
         
         # Iterate through the frequencies
         for freq in freq_map.values():
-            # If there are groups of 3, remove them directly
-            if freq % 3 == 0:
-                operations += freq // 3
-            # If there are groups of 2, keep track of them
-            elif freq % 3 == 1:
-                pairs.append(1)
-            # If there are groups of 1, check if there are pairs available to eliminate them
-            else:
-                if pairs:
-                    pairs.pop()
-                else:
-                    return -1
+            # Count how many pairs and triples can be formed for each frequency
+            pairs += freq // 2
+            triples += freq // 3
         
-        # If there are remaining pairs, use them to eliminate single elements
-        if pairs:
-            operations += len(pairs)
+        # Check if the total count of pairs and triples is sufficient to empty the array
+        if pairs >= triples:
+            # Calculate the total number of operations required
+            return pairs * 2 + triples * 3
         else:
             return -1
-        
-        return operations
