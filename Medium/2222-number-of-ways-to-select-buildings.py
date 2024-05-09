@@ -27,4 +27,10 @@ class Solution(object):
             elif s[i] == '1':
                 total_ways += n01[i - 1]
         
+        # Handle edge cases where the string starts or ends with '1' or '0'
+        if s[0] == '0':
+            total_ways -= n10[0]
+        if s[-1] == '0':
+            total_ways -= n01[-1]
+        
         return total_ways
