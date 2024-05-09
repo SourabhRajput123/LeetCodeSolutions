@@ -13,11 +13,11 @@ class Solution(object):
         # Compute counts for subsequent buildings
         for i in range(1, n):
             if s[i] == '0':
-                n01[i] = n01[i - 1]
-                n10[i] = n01[i - 1] + n10[i - 1]
-            elif s[i] == '1':
                 n01[i] = n01[i - 1] + n10[i - 1]
                 n10[i] = n10[i - 1]
+            elif s[i] == '1':
+                n01[i] = n01[i - 1]
+                n10[i] = n01[i - 1] + n10[i - 1]
         
         # Compute the total number of valid selections
         total_ways = 0
