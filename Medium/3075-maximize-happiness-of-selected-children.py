@@ -8,18 +8,15 @@ class Solution(object):
         # Sort the happiness array in non-decreasing order
         happiness.sort(reverse=True)
         
-        # Simulate the process of selecting children
-        for _ in range(k):
-            # Select a child with maximum happiness
-            max_happiness = happiness[0]
-            # Update happiness values of remaining children
-            for i in range(len(happiness)):
-                if happiness[i] == max_happiness:
-                    happiness[i] = max(0, happiness[i] - 1)
-                else:
-                    break
+        # Initialize the maximum sum
+        max_sum = 0
         
-        # Calculate the maximum sum of happiness values
-        max_sum = sum(happiness)
+        # Iterate through the first k elements
+        for i in range(k):
+            # If the current happiness value is negative after decrementing, break the loop
+            if happiness[i] - i <= 0:
+                break
+            # Add the happiness value after decrementing to the maximum sum
+            max_sum += happiness[i] - i
         
         return max_sum
