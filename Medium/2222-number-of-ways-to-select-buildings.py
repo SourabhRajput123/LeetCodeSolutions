@@ -33,4 +33,8 @@ class Solution(object):
         if s[-1] == '0':
             total_ways -= n01[-1]
         
+        # Handle cases where the entire string consists of only ones or only zeros
+        if s.count('0') == 0 or s.count('1') == 0:
+            return 0
+        
         return total_ways
