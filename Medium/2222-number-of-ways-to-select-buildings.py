@@ -21,7 +21,7 @@ class Solution(object):
         
         # Compute the total number of valid selections
         total_ways = 0
-        for i in range(1, n - 1):  # Adjusted iteration range
+        for i in range(1, n - 1):
             if s[i] == '0':
                 total_ways += n01[i - 1] + n10[i - 1]
             elif s[i] == '1':
