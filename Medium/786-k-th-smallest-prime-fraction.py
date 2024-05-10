@@ -1,23 +1,21 @@
+import heapq
+
 class Solution(object):
-    def countFractions(self, arr, mid):
-        count = 0
-        max_fraction = 0
-        j = 1
-        for i in range(len(arr) - 1):
-            while j < len(arr) and arr[i] * arr[j] <= mid:
-                j += 1
-            count += len(arr) - j
-            if j < len(arr):
-                max_fraction = max(max_fraction, float(arr[i]) / arr[j])
-        return count, max_fraction
-    
     def kthSmallestPrimeFraction(self, arr, k):
-        left, right = 0, 1
-        while left < right:
-            mid = (left + right) / 2
-            count, max_fraction = self.countFractions(arr, mid)
-            if count < k:
-                left = max_fraction
-            else:
-                right = mid
-        return [arr[0], arr[-1]]
+        # Priority queue to store fractions, sorted by their value
+        pq = []
+        
+        # Initialize the priority queue with all fractions
+        for i in range(len(arr) - 1):
+            heapq.heappush(pq, (arr[i] / float(arr[-1]), i, len(arr) - 1))
+        
+        # Pop the smallest fraction k times
+        while k > 1:
+            _, i, j = heapq.heappop(pq)
+            if j > i + 1:
+                heapq.heappush(pq, (arr[i] / float(arr[j - 1]), i, j - 1))
+            k -= 1
+        
+        # Return the kth smallest fraction
+        _, i, j = heapq.heappop(pq)
+        return [arr[i], arr[j]]
