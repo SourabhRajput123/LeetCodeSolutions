@@ -27,4 +27,7 @@ class FoodRatings(object):
 
     def get_cuisine(self, food):
         # Helper function to get the cuisine of a given food
-        return [cuisine for cuisine, f in self.highest_rated_per_cuisine.items() if f == food][0] if food in self.highest_rated_per_cuisine.values() else None
+        for cuisine, f in self.highest_rated_per_cuisine.items():
+            if f == food:
+                return cuisine
+        return None
