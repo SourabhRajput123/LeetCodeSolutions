@@ -18,8 +18,10 @@ class FoodRatings(object):
         
         # Update highest rated food for its cuisine if necessary
         cuisine = self.get_cuisine(food)
-        if cuisine and self.food_ratings[self.highest_rated_per_cuisine[cuisine]] < newRating:
-            self.highest_rated_per_cuisine[cuisine] = food
+        if cuisine:
+            highest_rated_food = self.highest_rated_per_cuisine.get(cuisine)
+            if highest_rated_food == food or self.food_ratings[highest_rated_food] < newRating:
+                self.highest_rated_per_cuisine[cuisine] = food
 
     def highestRated(self, cuisine):
         # Return the highest rated food for the given cuisine
