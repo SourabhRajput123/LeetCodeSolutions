@@ -1,16 +1,18 @@
 class Solution(object):
     def destCity(self, paths):
-        # Create a dictionary to store the destination cities for each starting city
-        destinations = {}
-        
-        # Populate the dictionary with paths
+        # Create sets to store starting and destination cities
+        starts = set()
+        destinations = set()
+
+        # Populate the sets
         for path in paths:
-            start, end = path
-            destinations[start] = end
-        
-        # Start from any city and follow the path until we reach a city that is not in the dictionary
-        city = paths[0][0]
-        while city in destinations:
-            city = destinations[city]
-        
-        return city
+            starts.add(path[0])
+            destinations.add(path[1])
+
+        # Find the city that is in destinations but not in starts
+        for city in destinations:
+            if city not in starts:
+                return city
+
+        # If no such city is found (which shouldn't happen according to the problem constraints)
+        return None
