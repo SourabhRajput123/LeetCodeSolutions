@@ -24,33 +24,6 @@ class Solution(object):
         
         return d
     
-    def can_reach(self, grid, v):
-        n = len(grid)
-        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-        
-        # Eliminate cells with safeness factor < v
-        for i in range(n):
-            for j in range(n):
-                if grid[i][j] < v:
-                    grid[i][j] = 0
-        
-        # BFS from (0, 0) to (n - 1, n - 1)
-        q = deque([(0, 0)])
-        visited = set([(0, 0)])
-        
-        while q:
-            x, y = q.popleft()
-            if (x, y) == (n - 1, n - 1):
-                return True
-            
-            for dx, dy in dirs:
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in visited and grid[nx][ny] > 0:
-                    visited.add((nx, ny))
-                    q.append((nx, ny))
-        
-        return False
-    
     def maximumSafenessFactor(self, grid):
         """
         :type grid: List[List[int]]
@@ -60,15 +33,12 @@ class Solution(object):
         d = self.bfs(grid)
         
         n = len(grid)
-        lo, hi = 0, n * 2
-        result = -1
+        max_safeness_factor = 0
         
-        while lo <= hi:
-            mid = (lo + hi) // 2
-            if self.can_reach([row[:] for row in grid], mid):
-                result = mid
-                lo = mid + 1
-            else:
-                hi = mid - 1
+        # Iterate through each cell and calculate maximum safeness factor
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] == 0:
+                    max_safeness_factor = max(max_safeness_factor, d[i][j])
         
-        return result
+        return max_safeness_factor if max_safeness_factor != float('inf') else -1
