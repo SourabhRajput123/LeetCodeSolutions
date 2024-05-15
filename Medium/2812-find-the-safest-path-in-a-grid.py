@@ -1,39 +1,74 @@
+from collections import deque
+
 class Solution(object):
+    def bfs(self, grid):
+        n = len(grid)
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        d = [[float('inf')] * n for _ in range(n)]
+        
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    q = deque([(i, j, 0)])
+                    visited = set([(i, j)])
+                    
+                    while q:
+                        x, y, dist = q.popleft()
+                        d[x][y] = min(d[x][y], dist)
+                        
+                        for dx, dy in dirs:
+                            nx, ny = x + dx, y + dy
+                            if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in visited:
+                                visited.add((nx, ny))
+                                q.append((nx, ny, dist + 1))
+        
+        return d
+    
+    def can_reach(self, grid, v):
+        n = len(grid)
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        
+        # Eliminate cells with safeness factor < v
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] < v:
+                    grid[i][j] = 0
+        
+        # BFS from (0, 0) to (n - 1, n - 1)
+        q = deque([(0, 0)])
+        visited = set([(0, 0)])
+        
+        while q:
+            x, y = q.popleft()
+            if (x, y) == (n - 1, n - 1):
+                return True
+            
+            for dx, dy in dirs:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in visited and grid[nx][ny] > 0:
+                    visited.add((nx, ny))
+                    q.append((nx, ny))
+        
+        return False
+    
     def maximumSafenessFactor(self, grid):
         """
         :type grid: List[List[int]]
         :rtype: int
         """
+        # Perform BFS to calculate smallest Manhattan distance from each cell to nearest thief
+        d = self.bfs(grid)
+        
         n = len(grid)
-        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        lo, hi = 0, n * 2
+        result = -1
         
-        # Initialize distance grid with maximum safeness factor
-        distance = [[float('inf')] * n for _ in range(n)]
-        distance[0][0] = 0
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if self.can_reach([row[:] for row in grid], mid):
+                result = mid
+                lo = mid + 1
+            else:
+                hi = mid - 1
         
-        # Initialize priority queue with (safeness factor, row, col)
-        pq = [(0, 0, 0)]
-        
-        while pq:
-            safeness, r, c = heapq.heappop(pq)
-            
-            # If current cell is the destination, return safeness factor
-            if (r, c) == (n - 1, n - 1):
-                return safeness
-            
-            # Explore adjacent cells
-            for dr, dc in dirs:
-                nr, nc = r + dr, c + dc
-                
-                # Check if adjacent cell is within bounds
-                if 0 <= nr < n and 0 <= nc < n:
-                    # Calculate new safeness factor
-                    new_safeness = max(safeness, abs(nr - (n - 1)) + abs(nc - (n - 1)))
-                    
-                    # Update distance if new safeness factor is smaller
-                    if new_safeness < distance[nr][nc]:
-                        distance[nr][nc] = new_safeness
-                        heapq.heappush(pq, (new_safeness, nr, nc))
-        
-        # If destination cannot be reached, return -1
-        return -1
+        return result
